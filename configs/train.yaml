@@ -1,0 +1,47 @@
+# YOLOv8 training configuration.
+# Consumed by `src.training.train.run_training`.
+#
+# All keys (except `model`) are forwarded as-is to `ultralytics.YOLO.train()`.
+# The `data`, `project`, and `device` keys get sensible defaults injected if
+# not set explicitly here.
+
+# Base checkpoint to fine-tune.
+# yolov8s gives the detector more capacity for small / cluttered household
+# objects while still being practical on a single CUDA GPU.
+model: "yolov8s.pt"
+
+# Training schedule
+epochs: 150
+imgsz: 768
+batch: 12
+workers: 8
+patience: 30          # early-stopping patience (epochs without val mAP improvement)
+
+# Optimiser / LR schedule
+optimizer: "SGD"      # SGD is the ultralytics default and works well with cosine decay
+lr0: 0.01
+lrf: 0.01             # final LR = lr0 * lrf
+momentum: 0.937
+weight_decay: 0.0005
+warmup_epochs: 3.0
+cos_lr: true
+
+# Augmentations (ultralytics defaults kept conservative for indoor scenes)
+hsv_h: 0.015
+hsv_s: 0.7
+hsv_v: 0.4
+degrees: 0.0
+translate: 0.1
+scale: 0.5
+fliplr: 0.5
+flipud: 0.0
+mosaic: 1.0
+mixup: 0.0
+close_mosaic: 15      # improve final localization after heavy mosaic augmentation
+
+# Bookkeeping
+project: "outputs/runs"
+name: "pet_mischief"
+exist_ok: true
+pretrained: true
+seed: 42

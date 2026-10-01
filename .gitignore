@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Weights and downloaded data
+*.pt
+*.cache
+data/raw/
+data/interim/
+data/yolo/
+data/external/
+
+# Generated images, analysis prose, and duplicated training runs
+test_images/
+runs/
+outputs/predictions/
+outputs/eval/**/*.png
+outputs/eval/**/*.jpg
+outputs/eval/**/*.md
+outputs/figures/
+outputs/logs/
+
+.agents/
+skills-lock.json
+AGENTS.md
+docs/agents/

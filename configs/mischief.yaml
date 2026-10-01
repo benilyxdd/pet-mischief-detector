@@ -1,0 +1,67 @@
+# Mischief-scoring configuration.
+# Consumed by `src.mischief` and `src.inference.infer`.
+
+# Thresholds applied to the final (tier-weighted) score in [0, 1].
+# With the default 0.5 / 0.5 iou/proximity weights and a 0.35 ignore_distance,
+# a pet whose bbox touches a fragile object reaches ~0.5 (high), while a pet
+# merely within the danger radius lands in [0.3, 0.5] (medium).
+thresholds:
+  high: 0.5
+  medium: 0.25
+
+# Pairs whose normalized min-edge distance exceeds this fraction of the
+# image diagonal are dropped entirely (they are simply "far apart").
+ignore_distance: 0.35
+
+# Weighted combination of the two proximity features. Weights are
+# normalised internally; only their ratio matters.
+weights:
+  iou: 0.5
+  proximity: 0.5
+
+# Which objects belong to which risk tier, and how much that tier's
+# weight multiplies the raw (IoU, proximity) score.
+rules:
+  high_risk:
+    objects: ["cup", "bottle", "wine glass", "vase", "potted plant", "laptop"]
+    weight: 1.0
+  medium_risk:
+    objects: ["tv"]
+    weight: 0.6
+  low_risk:
+    # Safe "contexts" -- pet on these is usually just napping / sitting.
+    objects: ["couch", "bed", "chair", "dining table"]
+    weight: 0.2
+
+# Warning messages. Lookup order for a (pet, object, risk_level) triple:
+#   1. overrides[risk_level]["{pet}-{object}"]
+#   2. templates[risk_level].format(pet=..., object=...)
+#   3. generic fallback
+messages:
+  templates:
+    high: "Mischief Alert! Your {pet} is plotting against the {object}!"
+    medium: "Heads up: your {pet} is getting close to the {object}."
+    low: "All clear. Your {pet} is resting peacefully near the {object}."
+  overrides:
+    high:
+      cat-cup: "Mischief Alert! Your cat is plotting against your drink!"
+      cat-wine glass: "Mischief Alert! Your cat is eyeing that wine glass!"
+      cat-vase: "Mischief Alert! Your cat is staring intently at the vase!"
+      cat-potted plant: "Mischief Alert! Your cat is about to shred that plant!"
+      cat-laptop: "Mischief Alert! Your cat is walking across your laptop!"
+      dog-cup: "Mischief Alert! Your dog is about to knock over your cup!"
+      dog-laptop: "Mischief Alert! Your dog is chewing on your laptop cable!"
+      dog-bottle: "Mischief Alert! Your dog is sniffing at the bottle!"
+      dog-potted plant: "Mischief Alert! Your dog is digging in the plant!"
+    medium:
+      cat-tv: "Heads up: your cat is getting too close to the TV."
+      dog-tv: "Heads up: your dog is hovering near the TV."
+      cat-laptop: "Heads up: your cat is inspecting the laptop."
+      dog-laptop: "Heads up: your dog is hovering near the laptop."
+    low:
+      cat-couch: "All clear. Your cat is napping on the couch."
+      cat-bed: "All clear. Your cat is curled up on the bed."
+      dog-couch: "All clear. Your dog is napping on the couch."
+      dog-bed: "All clear. Your dog is curled up on the bed."
+      dog-chair: "All clear. Your dog is settled on the chair."
+      cat-chair: "All clear. Your cat is perched on the chair."

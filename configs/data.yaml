@@ -1,0 +1,29 @@
+# Data pipeline configuration.
+# Consumed by `src.data.prepare.prepare_dataset`.
+
+fiftyone:
+  # Name of the curated FiftyOne dataset (persisted in the Mongo-backed DB).
+  dataset_name: "coco2017_mischief"
+  # Which COCO-2017 splits to pull from the FiftyOne Zoo.
+  # FiftyOne downloads only images containing at least one of our target classes.
+  splits_to_download: ["train", "validation"]
+  # COCO provides bounding-box detections; we only need this label type.
+  label_types: ["detections"]
+  # Field on each FiftyOne sample where the detections live (COCO default).
+  label_field: "ground_truth"
+  # Optional cap per split (null = no cap). Useful for smoke tests.
+  max_samples_per_split: null
+
+split:
+  # 80 / 10 / 10 reproducible split.
+  ratios:
+    train: 0.8
+    val: 0.1
+    test: 0.1
+  seed: 42
+
+export:
+  # Written as `data/yolo/` with YOLOv5-style images/{split}/ + labels/{split}/
+  # and a hand-written dataset.yaml (FiftyOne's auto-generated yaml is replaced).
+  output_dir: "data/yolo"
+  overwrite: true

@@ -1,0 +1,31 @@
+[project]
+name = "pet-mischief-detector"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fiftyone>=1.14.1",
+    "matplotlib>=3.7",
+    "numpy>=1.24",
+    "opencv-python>=4.8",
+    "pandas>=2.0",
+    "pyyaml>=6.0",
+    "scikit-learn>=1.3",
+    "seaborn>=0.13",
+    "torch>=2.6.0; sys_platform != 'darwin' or platform_machine == 'arm64'",
+    "torch<=2.2.2; sys_platform == 'darwin' and platform_machine == 'x86_64'",
+    "torchvision>=0.21.0; sys_platform != 'darwin' or platform_machine == 'arm64'",
+    "torchvision<=0.17.2; sys_platform == 'darwin' and platform_machine == 'x86_64'",
+    "tqdm>=4.66",
+    "ultralytics>=8.2.0",
+]
+[[tool.uv.index]]
+name = "pytorch-cuda"
+url = "https://download.pytorch.org/whl/cu124"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cuda", marker = "sys_platform != 'darwin'" }
+torchvision = { index = "pytorch-cuda", marker = "sys_platform != 'darwin'" }
+torchaudio = { index = "pytorch-cuda", marker = "sys_platform != 'darwin'" }

@@ -1,0 +1,29 @@
+# Detector evaluation configuration.
+# Consumed by `src.evaluation.detector_eval.evaluate_detector`.
+#
+# All keys are forwarded as-is to `ultralytics.YOLO.val()`. The `data`,
+# `split`, `project`, `name`, and `device` keys get sensible defaults
+# injected by `evaluate_detector` if left unset here.
+#
+# Rationale for each non-default key:
+# - `imgsz: 768` matches `configs/train.yaml` so we evaluate at the same
+#   resolution the model was trained on (avoids scale-shift artefacts in
+#   the reported mAP).
+# - `iou: 0.6` lowers the NMS IoU threshold from the 0.7 default. Helps on
+#   cluttered indoor scenes where multiple household objects overlap.
+# - `conf: 0.001` is the standard low-confidence threshold for mAP
+#   evaluation so the precision-recall curve is traced fully.
+# - `augment: true` enables test-time augmentation (TTA). Typically adds
+#   +1-2 mAP for free; the only cost is slower inference at eval time.
+# - `half: true` uses FP16 on CUDA (silently no-ops on CPU / MPS) for a
+#   faster run with no measurable accuracy loss.
+# - `plots: true` triggers Ultralytics to dump PR / P / R / F1 curves and
+#   the confusion-matrix images into `outputs/eval/test/`.
+
+imgsz: 768
+iou: 0.6
+conf: 0.001
+augment: true
+half: true
+plots: true
+verbose: false
